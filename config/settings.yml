@@ -1,0 +1,15 @@
+plugins:
+  sso_token_enabled:
+    default: true
+    client: false
+    description: "Enable SSO token capture and forwarding"
+  
+  sso_token_param_name:
+    default: "token"
+    client: false
+    description: "Name of the query parameter to capture the token from"
+  
+  sso_token_session_key:
+    default: "sso_token"
+    client: false
+    description: "Session key to store the token"

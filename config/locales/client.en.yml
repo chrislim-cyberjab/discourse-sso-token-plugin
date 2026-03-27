@@ -1,0 +1,5 @@
+en:
+  site_settings:
+    sso_token_enabled: "Enable SSO token capture and forwarding"
+    sso_token_param_name: "Name of the query parameter to capture the token from"
+    sso_token_session_key: "Session key to store the token"
