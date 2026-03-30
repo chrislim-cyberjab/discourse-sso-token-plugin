@@ -17,7 +17,7 @@ end
 after_initialize do
   require_relative "lib/sso_token_modifier"
   require_relative "lib/sso_token_controller"
-  Discourse::Application.routes.append do
+  Discourse::Application.routes.prepend do
     mount ::DiscourseSSOToken::Engine, at: "/sso-token"
   end
 
