@@ -4,22 +4,20 @@ module DiscourseSSOToken
   class SsoTokenController < ::ApplicationController
     requires_plugin "discourse-sso-token-plugin"
 
-    # Capture the token from the query parameter and store it in the session
     def capture_token
+      return redirect_to("/") unless SiteSetting.sso_token_enabled
+
       token = params[SiteSetting.sso_token_param_name.to_sym]
-      
+
       if token.present?
-        # Store the token in the session
         session[SiteSetting.sso_token_session_key.to_sym] = token
-        
-        Rails.logger.info("[SSO Token] Token captured and stored in session: #{token[0..10]}...")
-        
-        # Redirect to the home page or the referrer
-        redirect_to params[:redirect_to] || "/"
-      else
-        # No token provided, just redirect
-        redirect_to "/"
+        Rails.logger.info("[SSO Token] Stored in session: #{token[0..10]}...")
       end
+
+      # After capturing, redirect straight into SSO flow
+      # so token is in session when sso_provider runs
+      redirect_to = params[:redirect_to].presence || "/"
+      redirect_to redirect_to
     end
   end
 end
