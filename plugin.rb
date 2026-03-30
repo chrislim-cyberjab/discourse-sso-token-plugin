@@ -37,10 +37,10 @@ after_initialize do
   end
 
   SessionController.class_eval do
-    alias_method :sso_provider_original, :sso_provider
+    alias_method :sso_original, :sso
 
-    def sso_provider(payload = nil, confirmed_2fa_during_login = false)
-      sso_provider_original(payload, confirmed_2fa_during_login)
+    def sso
+      sso_original
 
       return unless SiteSetting.sso_token_enabled
       token = session[SiteSetting.sso_token_session_key.to_sym]
