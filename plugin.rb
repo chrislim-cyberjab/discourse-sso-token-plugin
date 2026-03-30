@@ -46,16 +46,21 @@ after_initialize do
       token = session[SiteSetting.sso_token_session_key.to_sym]
       return unless token.present?
 
-      if response.location.present?
-        uri = URI.parse(response.location)
+      location = response.location
+      return unless location.present?
+
+      begin
+        uri = URI.parse(location)
         new_query = URI.decode_www_form(uri.query || "")
         new_query << [SiteSetting.sso_token_param_name, token]
         uri.query = URI.encode_www_form(new_query)
-        redirect_to uri.to_s, status: response.status
+
+        # Overwrite the location header directly instead of calling redirect_to again
+        response.headers["Location"] = uri.to_s
         Rails.logger.info("[SSO Token] Appended token to SSO redirect: #{uri}")
+      rescue URI::InvalidURIError => e
+        Rails.logger.error("[SSO Token] Failed to modify SSO URL: #{e.message}")
       end
-    rescue URI::InvalidURIError => e
-      Rails.logger.error("[SSO Token] Failed to modify SSO URL: #{e.message}")
     end
   end
 end
