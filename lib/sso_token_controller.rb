@@ -14,10 +14,7 @@ module DiscourseSSOToken
         Rails.logger.info("[SSO Token] Stored in session: #{token[0..10]}...")
       end
 
-      # After capturing, redirect straight into SSO flow
-      # so token is in session when sso_provider runs
-      redirect_to = params[:redirect_to].presence || "/"
-      redirect_to redirect_to
+      redirect_to params[:redirect_to].presence || "/"
     end
   end
 end

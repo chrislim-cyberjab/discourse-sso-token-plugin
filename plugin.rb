@@ -16,6 +16,7 @@ end
 
 after_initialize do
   require_relative "lib/sso_token_modifier"
+  require_relative "lib/sso_token_controller"
 
   ApplicationController.class_eval do
     before_action :capture_sso_token
