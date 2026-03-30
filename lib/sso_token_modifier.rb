@@ -12,6 +12,8 @@ module DiscourseSSOToken
     # Override the sso_url method to append the token
     def sso_url
       url = super
+      # print
+      puts url
       
       if token.present?
         # Append the token to the SSO URL
