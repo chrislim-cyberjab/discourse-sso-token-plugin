@@ -6,20 +6,8 @@
 
 enabled_site_setting :sso_token_enabled
 
-# Engine must be defined BEFORE after_initialize so routes.rb can mount it
-# module ::DiscourseSSOToken
-#   class Engine < ::Rails::Engine
-#     engine_name "discourse_sso_token"
-#     isolate_namespace DiscourseSSOToken
-#   end
-# end
-
 after_initialize do
   require_relative "lib/sso_token_modifier"
-  # require_relative "lib/sso_token_controller"
-  # Discourse::Application.routes.prepend do
-  #   mount ::DiscourseSSOToken::Engine, at: "/sso-token"
-  # end
 
   ApplicationController.class_eval do
     before_action :capture_sso_token
@@ -32,6 +20,8 @@ after_initialize do
       if token.present?
         session[SiteSetting.sso_token_session_key.to_sym] = token
         Rails.logger.info("[SSO Token] Captured: #{token[0..10]}...")
+        # Immediately trigger SSO after capturing token
+        redirect_to "/session/sso", status: :found and return
       end
     end
   end
