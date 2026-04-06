@@ -11,10 +11,17 @@ A Discourse plugin that captures a token from a query parameter and appends it t
 
 ## Installation
 
-1. Clone this repository into your Discourse plugins directory:
+1. Add repository to app.yml:
    ```bash
-   cd /var/discourse/plugins
-   git clone https://github.com/cyberjab/discourse-sso-token-plugin.git
+      ## plugins
+      hooks:
+      after_code:
+         - exec:
+            cd: $home/plugins
+            cmd:
+               - git clone https://github.com/cyberjab/discourse-sso-token-plugin.git
+
+      ## before the run: command
    ```
 
 2. Rebuild your Discourse container:
@@ -45,13 +52,6 @@ To capture a token, simply include the token parameter in any URL to your Discou
 
 ```
 https://your-discourse-site.com?token=your-token-value
-```
-
-The token will be automatically captured and stored in the user's session when they visit any page with the token parameter. You can also redirect users to specific pages:
-
-```
-https://your-discourse-site.com/latest?token=your-token-value
-https://your-discourse-site.com/categories?token=your-token-value
 ```
 
 ### SSO Integration
